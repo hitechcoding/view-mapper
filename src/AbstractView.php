@@ -34,7 +34,7 @@ abstract class AbstractView
     }
 
     /**  @return ViewIterator|static[] */
-    public static function lazy(callable $dataProvider): ViewIterator
+    public static function lazyCollection(callable $dataProvider): ViewIterator
     {
         $viewBuilder = static function ($entity) {
             /* @noinspection PhpMethodParametersCountMismatchInspection */

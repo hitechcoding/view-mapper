@@ -75,7 +75,7 @@ class OrderView extends AbstractView
     public function __construct(Order $order)
     {
         $this->sum = $order->getSum();
-        $this->products = ProductView::lazy(function () use ($order) {
+        $this->products = ProductView::lazyCollection(function () use ($order) {
             return $order->getProducts();
         });
     }
@@ -151,7 +151,7 @@ class OrderView extends AbstractView
     public function __construct(Order $order)
     {
         $this->sum = $order->getSum();
-        $this->products = ProductView::lazy(fn() => $order->getProducts());
+        $this->products = ProductView::lazyCollection(fn() => $order->getProducts());
     }
 }
 ```
