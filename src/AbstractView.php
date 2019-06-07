@@ -33,14 +33,25 @@ abstract class AbstractView
         return $views;
     }
 
-    /**  @return ViewIterator|static[] */
-    public static function lazyCollection(callable $dataProvider): ViewIterator
+    /**  @return LazyCollection|static[] */
+    public static function lazyCollection(callable $collectionProvider)
     {
         $viewBuilder = static function ($entity) {
             /* @noinspection PhpMethodParametersCountMismatchInspection */
             return new static($entity);
         };
 
-        return new ViewIterator($dataProvider, $viewBuilder);
+        return new LazyCollection($collectionProvider, $viewBuilder);
+    }
+
+    /** @return static|LazyProperty */
+    public static function lazy(callable $entityProvider)
+    {
+        $viewBuilder = static function ($entity) {
+            /* @noinspection PhpMethodParametersCountMismatchInspection */
+            return new static($entity);
+        };
+
+        return new LazyProperty($entityProvider, $viewBuilder);
     }
 }

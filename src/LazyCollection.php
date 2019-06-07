@@ -10,9 +10,9 @@ use IteratorAggregate;
 use function array_map;
 use function count;
 
-class ViewIterator implements IteratorAggregate, Countable
+class LazyCollection implements IteratorAggregate, Countable
 {
-    private $dataProvider;
+    private $collectionProvider;
 
     private $viewBuilder;
 
@@ -20,9 +20,9 @@ class ViewIterator implements IteratorAggregate, Countable
 
     private $views;
 
-    public function __construct(callable $dataProvider, callable $viewBuilder)
+    public function __construct(callable $collectionProvider, callable $viewBuilder)
     {
-        $this->dataProvider = $dataProvider;
+        $this->collectionProvider = $collectionProvider;
         $this->viewBuilder = $viewBuilder;
     }
 
@@ -46,7 +46,7 @@ class ViewIterator implements IteratorAggregate, Countable
             return;
         }
 
-        $dataProvider = $this->dataProvider;
+        $dataProvider = $this->collectionProvider;
         // run the closure to get entities
         $entities = $dataProvider();
 
