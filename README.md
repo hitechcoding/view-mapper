@@ -165,7 +165,7 @@ $view = new class ($orders) extends AbstractView
     
     public $orders;
 
-    public function __construct(array $orders)
+    public function __construct(iterable $orders)
     {
         $this->orders = OrderView::fromIterable($orders);
         // this can be one-liner using array_reduce and arrow function
@@ -175,3 +175,4 @@ $view = new class ($orders) extends AbstractView
     }
 };
 ``` 
+- If your view class deals with multiple results, typehint it with ``iterable`` instead of ``array``; it makes it easy to switch from fixed array to pagination tools that implements Iterator interface.
