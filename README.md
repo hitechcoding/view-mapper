@@ -70,6 +70,8 @@ class OrderView extends AbstractView
 {
     public $sum;
     
+    public $products;
+    
     public function __construct(Order $order)
     {
         $this->sum = $order->getSum();
