@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace HTC\ViewMapper;
 
 use BadMethodCallException;
+use function method_exists;
 use function property_exists;
 
 class LazyProperty
@@ -45,6 +46,15 @@ class LazyProperty
     public function __call($name, $arguments)
     {
         $this->init();
+
+        $view = $this->view;
+        if (method_exists($view, 'get'.$name)) {
+            return $view->{'get'.$name}($arguments);
+        }
+
+        if (method_exists($view, 'is'.$name)) {
+            return $view->{'is'.$name}($arguments);
+        }
 
         return $this->view->$name($arguments);
     }

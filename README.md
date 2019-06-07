@@ -132,12 +132,33 @@ The problem is if your template does not iterate thru products; method ``getProd
 
 But by using ``lazyCollection()``, method will be triggered **only** when first accessed in templates and only once. 
 
-### Issues
-If you rename properties in your view files, yes, it will break Twig. The difference is that it is centralized in one very small piece of code and it is hard to miss it. 
+---
 
-It is also much less of a problem if those properties are marked as unused by IDE; they are not here for the logic.
+You can lazily work with individual entities:
+```php
+class OrderView extends AbstractView
+{
+    // ...
+    
+    public $user;
+    
+    public function __construct(Order $order)
+    {
+        //...
+        $this->user = UserView::lazyProperty(function () use ($order) {
+            return $order->getUser();
+        });
+    }
+}
+```
+
+It is useful for ```@ToOne``` relations. Just like collections, loading will happen on first access only.
+
+### Issues
+If you rename properties in your view files, it will break templates just like for entities. The difference is that it is centralized in one very small piece of code making it hard to miss it. 
 
 If you check the code in AbstractView, you will see constructor being commented. It is due to bug in phpstan that is reported and fixed, but not merged at this moment. As soon as it is done, code will be updated.
+
 
 ### Best practices 
 - Use upcoming [arrow functions](https://wiki.php.net/rfc/arrow_functions_v2). Your lazy assignments would be even simpler:
@@ -148,31 +169,33 @@ class OrderView extends AbstractView
     
     public $products;
     
+    public $user;
+    
     public function __construct(Order $order)
     {
         $this->sum = $order->getSum();
         $this->products = ProductView::lazyCollection(fn() => $order->getProducts());
+        $this->user = UserView::lazyProperty(fn() => $order->getUser());
     }
 }
 ```
 - Keep in mind that view classes are reusable; you don't need individual classes per route, but per entity. 
-- Always use ``lazyCollection()``. The syntax is clear and you will get autocomplete for child views. 
+- Always use ``lazyCollection()`` and ``lazyProperty()``. The syntax is clear and you will get autocomplete for child views. 
 - If you need one-time calculation of something, you can use anon class instead of new file:
 ```php
-$view = new class ($orders) extends AbstractView
+$ordersView = new class ($orders) extends AbstractView
 {
     public $total = 0;
     
     public $orders;
-
-    public function __construct(iterable $orders)
+        
+    /** @param Order[] $orders */
+    public function __construct($orders)
     {
         $this->orders = OrderView::fromIterable($orders);
-        // this can be one-liner using array_reduce and arrow function
         foreach ($orders as $order) {
             $this->total += $order->getSum();
         }
     }
 };
 ``` 
-- If your view class deals with multiple results, typehint it with ``iterable`` instead of ``array``; it makes it easy to switch from fixed array to pagination tools that implements Iterator interface.

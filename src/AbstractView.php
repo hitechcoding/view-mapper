@@ -45,7 +45,7 @@ abstract class AbstractView
     }
 
     /** @return static|LazyProperty */
-    public static function lazy(callable $entityProvider)
+    public static function lazyProperty(callable $entityProvider)
     {
         $viewBuilder = static function ($entity) {
             /* @noinspection PhpMethodParametersCountMismatchInspection */
