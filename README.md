@@ -110,7 +110,7 @@ As you can see, very minor changes.
 
 The advantages are that public methods in entities can be safely renamed and their usages found. 
 
-Instead of using ``lazy()``, you _could_ write this:
+Instead of using ``lazyCollection()``, you _could_ write this:
 
 ```php
 class OrderView extends AbstractView
@@ -130,7 +130,7 @@ class OrderView extends AbstractView
 The problem is if your template does not iterate thru products; method ``getProducts()`` would **always** be executed, even if you don't display its results. For lazy loaded entities, it means another query will be executed for no reason.
 
 
-But by using ``lazy()``, method will be triggered **only** when first accessed in templates and only once. 
+But by using ``lazyCollection()``, method will be triggered **only** when first accessed in templates and only once. 
 
 ### Issues
 If you rename properties in your view files, yes, it will break Twig. The difference is that it is centralized in one very small piece of code and it is hard to miss it. 
@@ -156,7 +156,7 @@ class OrderView extends AbstractView
 }
 ```
 - Keep in mind that view classes are reusable; you don't need individual classes per route, but per entity. 
-- Always use ``lazy()``. The syntax is clear and you will get autocomplete for child views. 
+- Always use ``lazyCollection()``. The syntax is clear and you will get autocomplete for child views. 
 - If you need one-time calculation of something, you can use anon class instead of new file:
 ```php
 $view = new class ($orders) extends AbstractView
