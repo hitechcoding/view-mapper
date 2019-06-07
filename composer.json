@@ -1,0 +1,14 @@
+{
+    "name": "htc/view-mapper",
+    "description": "Map entities for views",
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": "~7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "HTC\\ViewMapper\\": "src"
+        }
+    }
+}
