@@ -11,7 +11,7 @@ use function gettype;
 use function sprintf;
 
 /**
- * Commented code is here until new version of phpstan comes with this bug merged @see https://github.com/phpstan/phpstan/issues/2160.
+ * Commented code is here until new version of phpstan comes with this fix merged @see https://github.com/phpstan/phpstan/issues/2160 .
  */
 abstract class AbstractView
 {
